@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   MAIN                                                                  11/28/2016 17:38:59 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  11/29/2016 10:01:17 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
@@ -21,28 +21,55 @@ line level    source
   11   1              init_timer0();
   12   1              init_uart();
   13   1              init_data();
-  14   1      }
-  15          
-  16          void main()
-  17          {
-  18   1      
-  19   1              init_mcu();
-  20   1              while(1)
-  21   1              {
-  22   2                      if(clksec_changed)
-  23   2                      {       
-  24   3                              clksec_changed=0;
-  25   3                              printf("%d\r\n",get_char());                                    
-  26   3                      }
-  27   2              
-  28   2              }
-  29   1      
-  30   1      }
+  14   1              enable_simple_key();
+  15   1      }
+  16          
+  17          void main()
+  18          {
+  19   1      
+  20   1              init_mcu();
+  21   1              while(1)
+  22   1              {
+  23   2                      if(sys_tick_int)
+  24   2                      {
+  25   3                              sys_tick_int=0;
+  26   3                              check_simple_key();
+  27   3                              if(bDosimpleKey_Event)
+  28   3                              {
+  29   4                                      bDosimpleKey_Event=0;
+  30   4                                      test_led1=0;
+  31   4                                      test_led2=0;
+  32   4                                      test_led3=0;
+  33   4                                      test_led4=0;
+  34   4                              }
+  35   3                              if(bDoLongsimpleKey_Event)
+  36   3                              {
+  37   4                                      bDoLongsimpleKey_Event=0;
+  38   4                                      test_led1=1;
+  39   4                                      test_led2=1;
+  40   4                                      test_led3=1;
+  41   4                                      test_led4=1;
+  42   4                              }
+  43   3                      }
+  44   2                      
+  45   2      
+  46   2                      if(clksec_changed)
+  47   2                      {       
+  48   3                              clksec_changed=0;
+  49   3                              
+  50   3                              //printf("%d\r\n",clksec_changed);                                      
+  51   3                      }
+  52   2              
+  53   2              }
+  54   1      
+C51 COMPILER V9.01   MAIN                                                                  11/29/2016 10:01:17 PAGE 2   
+
+  55   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     39    ----
-   CONSTANT SIZE    =      5    ----
+   CODE SIZE        =     62    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

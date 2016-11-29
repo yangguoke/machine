@@ -24,13 +24,30 @@ void main()
 		{
 			sys_tick_int=0;
 			check_simple_key();
+			if(bDosimpleKey_Event)
+			{
+				bDosimpleKey_Event=0;
+				test_led1=0;
+				test_led2=0;
+				test_led3=0;
+				test_led4=0;
+			}
+			if(bDoLongsimpleKey_Event)
+			{
+				bDoLongsimpleKey_Event=0;
+				test_led1=1;
+				test_led2=1;
+				test_led3=1;
+				test_led4=1;
+			}
 		}
 		
 
 		if(clksec_changed)
 		{	
 			clksec_changed=0;
-			printf("%d\r\n",);					
+			
+			//printf("%d\r\n",clksec_changed);					
 		}
 	
 	}

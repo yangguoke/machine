@@ -1,4 +1,5 @@
 ".\main.obj",
 ".\timer.obj",
-".\uart.obj" 
+".\uart.obj",
+".\simplekey.obj" 
 TO "machine" 

@@ -1,7 +1,7 @@
 
 #define _SIMPLEKEY_C_
 
-#include "..\include.h"
+#include "..\\Includes.h"
 
 #ifdef USE_SIMPLE_KEY
 #define SIMPLEYKEY_LONG_PRESS_TIME			1500
@@ -65,7 +65,7 @@ void check_simple_key()
 		if(simple_key_release_counting<(300/SCAN_KEY_TIME_BASE))
 		{
 			simple_key_release_counting++;
-			if(simple_key_release_counting>=(100/SCAN_KEY_TIME_BASE))
+			if(simple_key_release_counting>=(50/SCAN_KEY_TIME_BASE))
 			{
 				if(simple_key_press_counting>=((SIMPLEYKEY_LONG_PRESS_TIME-50)/SCAN_KEY_TIME_BASE)
 				//	&&simple_key_press_counting<((SIMPLEYKEY_LONG_PRESS_TIME+100)/SCAN_KEY_TIME_BASE)
