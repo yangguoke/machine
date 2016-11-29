@@ -1,0 +1,4 @@
+".\main.obj",
+".\timer.obj",
+".\uart.obj" 
+TO "machine" 

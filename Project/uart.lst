@@ -1,0 +1,251 @@
+C51 COMPILER V9.01   UART                                                                  11/28/2016 17:38:59 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\uart.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE ..\Uart\uart.c BROWSE DEBUG OBJECTEXTEND PRINT(.\uart.lst) OBJECT(.\uart.ob
+                    -j)
+
+line level    source
+
+   1          #define _UART_C_
+   2          #include "..\\Includes.h"
+   3          
+   4          unsigned char ostart;                /* transmission buffer start index      */
+   5          unsigned char oend;                  /* transmission buffer end index        */
+   6          
+   7          unsigned char  istart;                /* receiving buffer start index         */
+   8          unsigned char  iend;                  /* receiving buffer end index           */
+   9          
+  10          unsigned char  outbuf[OLEN];          /* storage for transmission buffer      */
+  11          unsigned char  inbuf[ILEN];           /* storage for receiving buffer         */
+  12          
+  13          unsigned char  receive_data;
+  14          
+  15          bit   sendfull;                       /* flag: marks transmit buffer full     */
+  16          bit   sendactive;                     /* flag: marks transmitter active       */
+  17          bit   sendstop;                       /* flag: marks XOFF character           */
+  18          bit     start_trans;
+  19          bit     char_rx;
+  20          /******************************************************************************/
+  21          /*       putbuf:  write a character to SBUF or transmission buffer            */
+  22          /******************************************************************************/
+  23          void putbuf (char c)  
+  24          {
+  25   1              if (!sendfull)  
+  26   1              {                   
+  27   2                      /* transmit only if buffer not full     */
+  28   2                      if (!sendactive && !sendstop)  {  /* if transmitter not active:           */
+  29   3                            sendactive = 1;                 /* transfer the first character direct  */
+  30   3                            SBUF = c;                       /* to SBUF to start transmission        */
+  31   3                      }
+  32   2                      else  {                           /* otherwize:                           */
+  33   3      
+  34   3                      // this cause a deadlock
+  35   3                      // consider that :
+  36   3                      //   if we just set SBUF above, and then
+  37   3                      //   quickly changed    oend, the TI interrupt will cause
+  38   3                      //      a send,<maybe the outbuf has not yet be fed , so send bad char out> and ++ostart, and then
+  39   3                      // here we consider that oend=ostart, so sendfull =1
+  40   3                      // but this is not the correct thing.
+  41   3                              ES=0;           // this is import
+  42   3                              outbuf[oend++ & (OLEN-1)] = c;                  /* transfer char to transmission buffer */
+  43   3                              if (((oend ^ ostart) & (OLEN-1)) == 0)
+  44   3                                      sendfull = 1;
+  45   3                      ES=1;
+  46   3                      }                                 /* set flag if buffer is full           */
+  47   2              }
+  48   1      }
+  49          
+  50          void IntToStr( unsigned int wVal, unsigned char ucBase, unsigned char* pBuf )
+  51          {
+  52   1          bit bShowZero = 0;
+  53   1          unsigned int wDivider;
+  54   1          unsigned char ucDisp;
+C51 COMPILER V9.01   UART                                                                  11/28/2016 17:38:59 PAGE 2   
+
+  55   1      
+  56   1          if( 0 == wVal )
+  57   1          {
+  58   2              pBuf[0] = '0';
+  59   2              pBuf[1] = '\0';
+  60   2              return;
+  61   2          }
+  62   1      
+  63   1          if( 16 == ucBase )
+  64   1              wDivider = 0x1000;
+  65   1          else
+  66   1              wDivider = 10000;
+  67   1      
+  68   1          while( wDivider )
+  69   1          {
+  70   2              ucDisp = wVal/wDivider;
+  71   2              wVal = wVal%wDivider;
+  72   2      
+  73   2              if( ucDisp )
+  74   2                  bShowZero = 1;
+  75   2      
+  76   2              if( ucDisp || bShowZero )
+  77   2              {
+  78   3                  if( ucDisp < 10 )
+  79   3                      *pBuf = '0' + ucDisp;
+  80   3                  else
+  81   3                      *pBuf = 'A' + ucDisp - 10;
+  82   3                  pBuf ++;
+  83   3              }
+  84   2      
+  85   2              if( 16 == ucBase )
+  86   2                  wDivider /= 0x10;
+  87   2              else
+  88   2                  wDivider /= 10;
+  89   2          }
+  90   1          *pBuf = '\0';
+  91   1      }
+  92          
+  93          void putstr(unsigned char *pFmt)
+  94          {
+  95   1          unsigned char ucBff; // character buffer
+  96   1      
+  97   1          while (1)
+  98   1          {
+  99   2               ucBff = *pFmt; // get a character
+ 100   2               if (ucBff == 0x00) // check end of string
+ 101   2                   break;
+ 102   2      
+ 103   2               putchar(ucBff); // put a character
+ 104   2      
+ 105   2               pFmt++; // next
+ 106   2          } // while
+ 107   1      }
+ 108          
+ 109          unsigned char s_Buf[6];
+ 110          void printf(unsigned char code *pFmt, unsigned int wVal)
+ 111          {
+ 112   1          unsigned int ucBff;
+ 113   1      
+ 114   1          while( ucBff = *(pFmt++) )
+ 115   1          {
+ 116   2              if(ucBff == '%') // check special case
+C51 COMPILER V9.01   UART                                                                  11/28/2016 17:38:59 PAGE 3   
+
+ 117   2              {
+ 118   3                  switch( *(pFmt++) ) // check next character
+ 119   3                  {
+ 120   4                      case 'x': // hexadecimal number
+ 121   4                      case 'X':
+ 122   4                          IntToStr( wVal, 16, s_Buf );
+ 123   4                          putstr( s_Buf );
+ 124   4                          break;
+ 125   4                      case 'd': // decimal number
+ 126   4                      case 'i':
+ 127   4                          IntToStr( wVal, 10, s_Buf );
+ 128   4                          putstr( s_Buf );
+ 129   4                          break;
+ 130   4                  } // switch
+ 131   3              }
+ 132   2              else // general
+ 133   2                  putchar(ucBff); // put a character
+ 134   2          } // while
+ 135   1      }
+ 136          
+ 137          /******************************************************************************/
+ 138          /*       putchar:  interrupt controlled putchar function                      */
+ 139          /******************************************************************************/
+ 140          void putchar (unsigned char c)  
+ 141          {
+ 142   1        while (sendfull)  {                 /* wait for transmission buffer empty   */
+ 143   2              ;
+ 144   2        }
+ 145   1        putbuf (c);                         /* send character                       */
+ 146   1      }
+ 147          
+ 148          unsigned char get_char()
+ 149          {
+ 150   1              #if 1
+ 151   1              return receive_data;
+ 152   1              #else
+                      unsigned char c;
+                      c=inbuf[istart ++];
+                      istart&=(ILEN-1);
+                      return c;
+                      #endif
+ 158   1      }
+ 159          
+ 160          void flush_serial_in()
+ 161          {
+ 162   1              ES=0;
+ 163   1              istart=iend=0;
+ 164   1              ES=1;
+ 165   1      }
+ 166          
+ 167          void init_uart()
+ 168          {
+ 169   1         iend=0;
+ 170   1         istart=0;
+ 171   1         sendactive=0;
+ 172   1         sendstop=0;
+ 173   1         start_trans=0;
+ 174   1         sendfull=0;  
+ 175   1      
+ 176   1         SCON=0x50; //配置串口为模式1
+ 177   1         TMOD|=0x20;
+ 178   1         PCON =0x00;
+C51 COMPILER V9.01   UART                                                                  11/28/2016 17:38:59 PAGE 4   
+
+ 179   1         TH1=0xFD;
+ 180   1         TL1=0xFD;
+ 181   1         ES=0;
+ 182   1         TI=0;
+ 183   1         TR1=1;
+ 184   1      
+ 185   1         char_rx=0;
+ 186   1         flush_serial_in();
+ 187   1         putstr("dbg start\r\n");
+ 188   1      }
+ 189          
+ 190          void uart() interrupt 4
+ 191          {
+ 192   1              unsigned char c;
+ 193   1              if (RI)  {                         /* if receiver interrupt                */
+ 194   2                  c = SBUF;                 /* read character                        */
+ 195   2                  RI = 0;                      /* clear interrupt request flag     */
+ 196   2                      #if 1
+ 197   2                      receive_data=c;
+ 198   2                      #else
+                               if (((iend +1)&( ILEN-1)) != istart)  {
+                                      inbuf[iend] = c;
+                                      char_rx=1;
+                                      iend++;
+                                      iend&=(ILEN-1);
+                              }
+                              #endif
+ 206   2              }
+ 207   1      
+ 208   1                if (TI)
+ 209   1                {          /* if transmitter interrupt              */
+ 210   2                      TI = 0;                          /* clear interrupt request flag          */
+ 211   2                      if (sendfull||ostart != oend)  {           /* if characters in buffer and           */
+ 212   3                            if (!sendstop)  {              /* if not Control+S received             */
+ 213   4                              SBUF = outbuf[ostart++ & (OLEN-1)];      /* transmit character        */
+ 214   4                              sendfull = 0;                /* clear 'sendfull' flag                 */
+ 215   4                                                               /* if task waiting: signal ready         */
+ 216   4                            }
+ 217   3                      }
+ 218   2                      else sendactive = 0;             /* if all transmitted clear 'sendactive' */
+ 219   2                }
+ 220   1      
+ 221   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    518    ----
+   CONSTANT SIZE    =     12    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27      19
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      5       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
