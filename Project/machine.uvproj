@@ -383,6 +383,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>I2c_master</GroupName>
+          <Files>
+            <File>
+              <FileName>i2cmdrv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\I2c_master\i2cmdrv.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

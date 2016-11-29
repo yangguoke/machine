@@ -373,6 +373,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Key</GroupName>
+          <Files>
+            <File>
+              <FileName>simplekey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Key\simplekey.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
