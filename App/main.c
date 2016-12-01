@@ -18,12 +18,15 @@ void main()
 {
 
 	init_mcu();
+	
+	I2C_bytewrite(0xa0,0x00,0x12);
+	printf("%d\r\n",I2C_byteread(0xa0,0x00));
+	
 	while(1)
 	{
 	   	if(sys_tick_int)
 		{
 			sys_tick_int=0;
-			#ifndef USE_RECEIVE
 			check_simple_key();
 			if(bDosimpleKey_Event)
 			{
@@ -41,24 +44,13 @@ void main()
 				test_led3=1;
 				test_led4=1;
 			}
-			#endif
-			#ifdef USE_RECEIVE
-			read_data=I2C_byteread(0xaa,0x01);
-			if(read_data!=0xff)
-			{
-				printf("%d\r\n",read_data);
-			}
-			#endif				
 		}
 		
 
 		if(clksec_changed)
-		{	
-			clksec_changed=0;
-			#ifndef USE_RECEIVE
-			I2C_bytewrite(0xaa,0x01,0x03);
-			#endif
-
+		{
+		
+			clksec_changed=0;			
 		}
 	
 	}
