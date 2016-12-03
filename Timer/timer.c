@@ -24,3 +24,9 @@ void timer0() interrupt	1
 		seconds_gone++;
 	}
 }
+ void Delayms(unsigned int n)
+ {
+	unsigned int i,j;
+	for(j=n;j>0;j--)
+	for(i=112;i>0;i--);
+ }

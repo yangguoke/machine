@@ -21,13 +21,15 @@ void main()
 	
 	I2C_bytewrite(0xa0,0x00,0x12);
 	printf("%d\r\n",I2C_byteread(0xa0,0x00));
-	
+	state_machine_init();
 	while(1)
 	{
 	   	if(sys_tick_int)
 		{
 			sys_tick_int=0;
 			check_simple_key();
+			state_machine_tick();
+			state_machine_engine();
 			if(bDosimpleKey_Event)
 			{
 				bDosimpleKey_Event=0;

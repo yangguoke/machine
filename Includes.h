@@ -8,4 +8,5 @@
 #include "Uart\uart.h"
 #include "Key\simplekey.h"
 #include "I2c_master\i2cmdrv.h"
+#include "Machine\statemachine.h"
 #endif

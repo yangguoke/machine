@@ -14,4 +14,5 @@ _TIMER_DEF bit sys_tick_int;
 
 _TIMER_DEF void init_timer0();
 _TIMER_DEF void timer0();	
+ _TIMER_DEF void Delayms(unsigned int n);
 #endif

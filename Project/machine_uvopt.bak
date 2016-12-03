@@ -258,8 +258,8 @@
       <Focus>0</Focus>
       <ColumnNumber>47</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>400</TopLine>
-      <CurrentLine>414</CurrentLine>
+      <TopLine>352</TopLine>
+      <CurrentLine>352</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\I2c_master\i2cmdrv.c</PathWithFileName>
       <FilenameWithoutPath>i2cmdrv.c</FilenameWithoutPath>
@@ -1828,8 +1828,8 @@
         <Doc>
           <Name>..\I2c_master\i2cmdrv.c</Name>
           <ColumnNumber>47</ColumnNumber>
-          <TopLine>400</TopLine>
-          <CurrentLine>414</CurrentLine>
+          <TopLine>352</TopLine>
+          <CurrentLine>352</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

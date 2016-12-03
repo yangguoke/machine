@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   MAIN                                                                  12/01/2016 15:53:09 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  12/03/2016 14:51:42 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
@@ -28,54 +28,52 @@ line level    source
   18          {
   19   1      
   20   1              init_mcu();
-  21   1              I2C_bytewrite(0xa0,0x00,0x12);
-  22   1              I2C_bytewrite(0xa0,0x01,0x15);
-  23   1              I2C_bytewrite(0xa0,0x02,0x17);
-  24   1      
-  25   1              printf("%d\r\n",I2C_byteread(0xa0,0x00));
-  26   1              printf("%d\r\n",I2C_byteread(0xa0,0x01));
-  27   1              printf("%d\r\n",I2C_byteread(0xa0,0x02));
-  28   1              
-  29   1              while(1)
-  30   1              {
-  31   2                      if(sys_tick_int)
-  32   2                      {
-  33   3                              sys_tick_int=0;
-  34   3                              check_simple_key();
-  35   3                              if(bDosimpleKey_Event)
-  36   3                              {
-  37   4                                      bDosimpleKey_Event=0;
-  38   4                                      test_led1=0;
-  39   4                                      test_led2=0;
-  40   4                                      test_led3=0;
-  41   4                                      test_led4=0;
-  42   4                              }
-  43   3                              if(bDoLongsimpleKey_Event)
-  44   3                              {
-  45   4                                      bDoLongsimpleKey_Event=0;
-  46   4                                      test_led1=1;
-  47   4                                      test_led2=1;
-  48   4                                      test_led3=1;
-  49   4                                      test_led4=1;
-  50   4                              }
-  51   3                      }
-  52   2                      
-  53   2      
-  54   2                      if(clksec_changed)
-C51 COMPILER V9.01   MAIN                                                                  12/01/2016 15:53:09 PAGE 2   
+  21   1              
+  22   1              I2C_bytewrite(0xa0,0x00,0x12);
+  23   1              printf("%d\r\n",I2C_byteread(0xa0,0x00));
+  24   1              state_machine_init();
+  25   1              while(1)
+  26   1              {
+  27   2                      if(sys_tick_int)
+  28   2                      {
+  29   3                              sys_tick_int=0;
+  30   3                              check_simple_key();
+  31   3                              state_machine_tick();
+  32   3                              state_machine_engine();
+  33   3                              if(bDosimpleKey_Event)
+  34   3                              {
+  35   4                                      bDosimpleKey_Event=0;
+  36   4                                      test_led1=0;
+  37   4                                      test_led2=0;
+  38   4                                      test_led3=0;
+  39   4                                      test_led4=0;
+  40   4                              }
+  41   3                              if(bDoLongsimpleKey_Event)
+  42   3                              {
+  43   4                                      bDoLongsimpleKey_Event=0;
+  44   4                                      test_led1=1;
+  45   4                                      test_led2=1;
+  46   4                                      test_led3=1;
+  47   4                                      test_led4=1;
+  48   4                              }
+  49   3                      }
+  50   2                      
+  51   2      
+  52   2                      if(clksec_changed)
+  53   2                      {
+  54   3                      
+C51 COMPILER V9.01   MAIN                                                                  12/03/2016 14:51:42 PAGE 2   
 
-  55   2                      {
-  56   3                      
-  57   3                              clksec_changed=0;                       
-  58   3                      }
-  59   2              
-  60   2              }
-  61   1      
-  62   1      }
+  55   3                              clksec_changed=0;                       
+  56   3                      }
+  57   2              
+  58   2              }
+  59   1      
+  60   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    153    ----
+   CODE SIZE        =    100    ----
    CONSTANT SIZE    =      5    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

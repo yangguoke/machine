@@ -2,5 +2,6 @@
 ".\timer.obj",
 ".\uart.obj",
 ".\simplekey.obj",
-".\i2cmdrv.obj" 
+".\i2cmdrv.obj",
+".\statemachine.obj" 
 TO "machine" 
