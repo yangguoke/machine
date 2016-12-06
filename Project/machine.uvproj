@@ -403,6 +403,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Lcd1602</GroupName>
+          <Files>
+            <File>
+              <FileName>Lcd1602.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LCD1602\Lcd1602.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

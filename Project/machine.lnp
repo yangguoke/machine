@@ -3,5 +3,6 @@
 ".\uart.obj",
 ".\simplekey.obj",
 ".\i2cmdrv.obj",
-".\statemachine.obj" 
+".\statemachine.obj",
+".\Lcd1602.obj" 
 TO "machine" 

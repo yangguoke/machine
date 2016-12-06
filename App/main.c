@@ -12,13 +12,14 @@ void init_mcu()
 	init_uart();
 	init_data();
 	enable_simple_key();
+	init_lcd1602();
 }
 
 void main()
 {
 
 	init_mcu();
-	
+	putstr("complete init\r\n");
 	I2C_bytewrite(0xa0,0x00,0x12);
 	printf("%d\r\n",I2C_byteread(0xa0,0x00));
 	state_machine_init();

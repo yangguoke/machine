@@ -9,4 +9,5 @@
 #include "Key\simplekey.h"
 #include "I2c_master\i2cmdrv.h"
 #include "Machine\statemachine.h"
+#include "Lcd1602\Lcd1602.h"
 #endif

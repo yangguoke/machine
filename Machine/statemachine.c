@@ -7,7 +7,7 @@ void IdleFunc(){
 
 void StartUpEnter()
 {
-
+	lcd1602_ShowString("YANGGUOKE",0x00);
 }
 
 void StartUpRun()

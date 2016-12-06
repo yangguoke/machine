@@ -393,6 +393,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Machine</GroupName>
+          <Files>
+            <File>
+              <FileName>statemachine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Machine\statemachine.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
